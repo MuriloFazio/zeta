@@ -1,8 +1,6 @@
 import axios from "axios";
 
-const apiKey = "SUA_CHAVE_API";
-
-export const getChatGPTResponse = async (prompt) => {
+export const getChatGPTResponse = async (prompt: string) => {
   try {
     const response = await axios.post(
       "https://api.openai.com/v1/chat/completions",
@@ -13,14 +11,15 @@ export const getChatGPTResponse = async (prompt) => {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey}`,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`,
         },
       }
     );
 
     return response.data.choices[0].message.content;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Erro na requisição: ", error);
+    console.error(error.response?.data || error.message);
     throw error;
   }
 };
