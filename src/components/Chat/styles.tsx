@@ -14,7 +14,7 @@ export const ChatArea = styled.div`
   padding: 16px;
   overflow-y: auto;
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   gap: 8px;
   justify-content: flex-end;
   align-items: center;
@@ -33,4 +33,14 @@ export const InputArea = styled(Paper)`
     color: #aaaaaa;
     opacity: 1;
   }
+`;
+
+export const MessageWrapper = styled.div<{ isUser: boolean }>`
+  align-items: ${(props) => (props.isUser ? "flex-end" : "flex-start")};
+  background-color: ${(props) => (props.isUser ? "#0078ff" : "#f0f0f0")};
+  color: ${(props) => (props.isUser ? "#fff" : "#333")};
+  padding: 10px 15px;
+  border-radius: 12px;
+  max-width: 80%;
+  word-wrap: break-word;
 `;
