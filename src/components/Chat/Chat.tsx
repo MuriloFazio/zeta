@@ -7,13 +7,13 @@ import React, { useEffect, useState, useRef } from "react";
 import { getChatGPTResponse } from "./connections";
 
 export const Chat: React.FC = () => {
-  const inputRef = useRef<HTMLInputElement>(null);
-
   const [messages, setMessages] = useState<{ role: string; content: string }[]>(
     []
   );
   const [userMessage, setUserMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const handleSendMessage = async () => {
     if (!userMessage.trim()) return;
@@ -41,8 +41,7 @@ export const Chat: React.FC = () => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Enter") {
-        return handleSendMessage();
-        // console.log("Apertou enter");
+        buttonRef.current?.click();
       }
     };
 
@@ -65,8 +64,8 @@ export const Chat: React.FC = () => {
           <MessageWrapper isUser={false}>Digitando...</MessageWrapper>
         )}
         {messages.map((message, index) => (
-          <MessageWrapper isUser={message.role === "user"}>
-            <div id={`${index}`}>{message.content}</div>
+          <MessageWrapper isUser={message.role === "user"} key={index}>
+            <div key={index}>{message.content}</div>
           </MessageWrapper>
         ))}
       </ChatArea>
@@ -83,6 +82,7 @@ export const Chat: React.FC = () => {
           color="primary"
           onClick={handleSendMessage}
           disabled={loading}
+          ref={buttonRef}
         >
           <SendIcon />
         </IconButton>

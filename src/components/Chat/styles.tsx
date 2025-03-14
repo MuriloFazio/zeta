@@ -36,9 +36,9 @@ export const InputArea = styled(Paper)`
 `;
 
 export const MessageWrapper = styled.div<{ isUser: boolean }>`
-  align-items: ${(props) => (props.isUser ? "flex-end" : "flex-start")};
-  background-color: ${(props) => (props.isUser ? "#0078ff" : "#f0f0f0")};
-  color: ${(props) => (props.isUser ? "#fff" : "#333")};
+  align-self: ${({ isUser }) => (isUser ? "flex-end" : "flex-start")};
+  background-color: ${({ isUser }) => (isUser ? "#0078ff" : "#f0f0f0")};
+  color: ${({ isUser }) => (isUser ? "#fff" : "#333")};
   padding: 10px 15px;
   border-radius: 12px;
   max-width: 80%;
