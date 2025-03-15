@@ -5,6 +5,7 @@ import SendIcon from "@mui/icons-material/Send";
 import { Container, ChatArea, InputArea, MessageWrapper } from "./styles";
 import React, { useEffect, useState, useRef } from "react";
 import { getChatGPTResponse } from "./connections";
+import { textFormatter } from "../../utils/formatters";
 
 export const Chat: React.FC = () => {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>(
@@ -60,12 +61,10 @@ export const Chat: React.FC = () => {
   return (
     <Container>
       <ChatArea>
-        {loading && (
-          <MessageWrapper isUser={false}>Digitando...</MessageWrapper>
-        )}
+        {loading && <div>Digitando...</div>}
         {messages.map((message, index) => (
           <MessageWrapper isUser={message.role === "user"} key={index}>
-            <div key={index}>{message.content}</div>
+            <div key={index}>{textFormatter(message.content)}</div>
           </MessageWrapper>
         ))}
       </ChatArea>
