@@ -30,7 +30,7 @@ export const Chat: React.FC = () => {
     } catch (error) {
       const errorMessage = {
         role: "system",
-        content: "Erro ao obter resposta do ChatGPT",
+        content: `Erro ao obter resposta do ChatGPT ${error}`,
       };
       setMessages((prevMessages) => [...prevMessages, errorMessage]);
     } finally {

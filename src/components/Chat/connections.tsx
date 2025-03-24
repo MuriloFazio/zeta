@@ -17,9 +17,8 @@ export const getChatGPTResponse = async (prompt: string) => {
     );
 
     return response.data.choices[0].message.content;
-  } catch (error: any) {
+  } catch (error) {
     console.error("Erro na requisição: ", error);
-    console.error(error.response?.data || error.message);
     throw error;
   }
 };
