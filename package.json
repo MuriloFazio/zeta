@@ -15,9 +15,11 @@
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^6.4.7",
     "@mui/material": "^6.4.7",
+    "@pinecone-database/pinecone": "^5.1.1",
     "axios": "^1.8.3",
     "mongoose": "^8.13.0",
     "next": "15.2.2",
+    "openai": "^4.89.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "styled-components": "^6.1.15"

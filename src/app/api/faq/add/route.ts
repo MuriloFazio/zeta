@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import { Faq } from "@/lib/faq.model";
+import { gerarEmbedding } from "@/lib/openai";
+import { index } from "@/lib/pinecone";
 
 export async function POST(req: Request) {
   try {
@@ -14,8 +16,21 @@ export async function POST(req: Request) {
       );
     }
 
+    // Gerar embedding da pergunta
+    const embedding = await gerarEmbedding(pergunta);
+
+    // Salvar no MongoDB
     const novaFaq = new Faq({ pergunta, resposta, categoria });
     await novaFaq.save();
+
+    // Salvar no Pinecone
+    await index.upsert([
+      {
+        id: novaFaq._id.toString(), // Usamos o ID do MongoDB como chave
+        values: embedding,
+        metadata: { resposta },
+      },
+    ]);
 
     return NextResponse.json({ message: "FAQ adicionada com sucesso!" });
   } catch (error) {
