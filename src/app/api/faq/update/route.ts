@@ -32,6 +32,7 @@ export async function PUT(req: Request) {
       faq: faqAtualizada,
     });
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       { error: "Erro ao atualizar FAQ." },
       { status: 500 }

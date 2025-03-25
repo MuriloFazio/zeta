@@ -34,6 +34,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ message: "FAQ adicionada com sucesso!" });
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       { error: "Erro ao adicionar FAQ." },
       { status: 500 }

@@ -22,6 +22,7 @@ export async function DELETE(req: Request) {
 
     return NextResponse.json({ message: "FAQ removida com sucesso!" });
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       { error: "Erro ao remover FAQ." },
       { status: 500 }

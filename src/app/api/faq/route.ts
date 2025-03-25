@@ -9,6 +9,7 @@ export async function GET() {
     const faqs = await Faq.find().sort({ atualizadoEm: -1 }); // Busca todas as perguntas, ordenadas pela mais recente
     return NextResponse.json(faqs);
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       { error: "Erro ao buscar FAQs." },
       { status: 500 }

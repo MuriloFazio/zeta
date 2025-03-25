@@ -33,6 +33,7 @@ export async function POST(req: Request) {
       resposta: "Desculpe, não encontrei essa informação.",
     });
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       { error: "Erro ao buscar resposta." },
       { status: 500 }
