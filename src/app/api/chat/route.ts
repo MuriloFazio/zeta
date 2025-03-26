@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
+import { connectDB } from "@/lib/mongodb";
+import { Faq } from "@/lib/faq.model";
 import { gerarEmbedding } from "@/lib/openai";
-import { index } from "@/lib/pinecone";
 
 export async function POST(req: Request) {
   try {
+    await connectDB();
     const { pergunta } = await req.json();
 
     if (!pergunta) {
@@ -16,17 +18,21 @@ export async function POST(req: Request) {
     // Gerar embedding da pergunta do usuário
     const embeddingPergunta = await gerarEmbedding(pergunta);
 
-    // Buscar a pergunta mais próxima no Pinecone
-    const busca = await index.query({
-      vector: embeddingPergunta,
-      topK: 1, // Retorna a resposta mais relevante
-      includeMetadata: true,
-    });
+    // Buscar a pergunta mais próxima usando Atlas Vector Search
+    const faq = await Faq.aggregate([
+      {
+        $vectorSearch: {
+          index: "test.faqs", // Nome do índice criado no MongoDB Atlas
+          path: "embedding",
+          queryVector: embeddingPergunta,
+          numCandidates: 10,
+          limit: 1,
+        },
+      },
+    ]);
 
-    if (busca.matches.length > 0) {
-      return NextResponse.json({
-        resposta: busca.matches[0].metadata?.resposta,
-      });
+    if (faq.length > 0) {
+      return NextResponse.json({ resposta: faq[0].resposta });
     }
 
     return NextResponse.json({
