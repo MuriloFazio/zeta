@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     const faq = await Faq.aggregate([
       {
         $vectorSearch: {
-          index: "test.faqs", // Nome do índice criado no MongoDB Atlas
+          index: "faqs", // Nome do índice criado no MongoDB Atlas
           path: "embedding",
           queryVector: embeddingPergunta,
           numCandidates: 10,
