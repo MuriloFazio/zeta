@@ -1,14 +1,46 @@
+"use server";
+
 import OpenAI from "openai";
 
 const openai = new OpenAI({
-  apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY, // Adicione essa variável no .env.local
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
-export async function gerarEmbedding(texto: string) {
+export async function createEmbedding(texto: string) {
   const response = await openai.embeddings.create({
     model: "text-embedding-ada-002",
     input: texto,
   });
 
-  return response.data[0].embedding; // Retorna o vetor de embedding
+  return response.data[0].embedding;
 }
+
+export const getChatGPTResponse = async (prompt: string) => {
+  try {
+    const response = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: prompt }],
+    });
+
+    return response.choices[0].message.content || "Resposta não disponível";
+  } catch (error) {
+    console.error("Erro na API da OpenAI:", error);
+    throw error;
+  }
+};
+
+export const classifyQuestion = async (pergunta: string) => {
+  const systemPrompt = `
+    Você é um assistente que classifica perguntas sobre a empresa XP.
+    Se a pergunta for sobre a empresa XP, seus produtos, serviços ou políticas internas, responda "sim".
+    Se for um assunto geral ou sobre outra empresa, responda "não".
+  `;
+
+  const resposta = await getChatGPTResponse(
+    `${systemPrompt} Pergunta: ${pergunta}`
+  );
+
+  console.log("Resposta do ChatGPT:", resposta);
+
+  return resposta && resposta.toLowerCase().includes("sim");
+};

@@ -1,45 +1,29 @@
 import { NextResponse } from "next/server";
-import { connectDB } from "@/lib/mongodb";
-import { Faq } from "@/lib/faq.model";
-import { gerarEmbedding } from "@/lib/openai";
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 export async function POST(req: Request) {
   try {
-    await connectDB();
-    const { pergunta } = await req.json();
+    const { prompt } = await req.json();
 
-    if (!pergunta) {
+    if (!prompt) {
       return NextResponse.json(
-        { error: "Pergunta é obrigatória." },
+        { error: "Pergunta obrigatória." },
         { status: 400 }
       );
     }
 
-    // Gerar embedding da pergunta do usuário
-    const embeddingPergunta = await gerarEmbedding(pergunta);
-
-    // Buscar a pergunta mais próxima usando Atlas Vector Search
-    const faq = await Faq.aggregate([
-      {
-        $vectorSearch: {
-          index: "faqs", // Nome do índice criado no MongoDB Atlas
-          path: "embedding",
-          queryVector: embeddingPergunta,
-          numCandidates: 10,
-          limit: 1,
-        },
-      },
-    ]);
-
-    if (faq.length > 0) {
-      return NextResponse.json({ resposta: faq[0].resposta });
-    }
-
-    return NextResponse.json({
-      resposta: "Desculpe, não encontrei essa informação.",
+    const response = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: prompt }],
     });
+
+    return NextResponse.json({ resposta: response.choices[0].message.content });
   } catch (error) {
-    console.log(error);
+    console.error("Erro na API da OpenAI:", error);
     return NextResponse.json(
       { error: "Erro ao buscar resposta." },
       { status: 500 }
