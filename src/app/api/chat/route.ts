@@ -14,6 +14,7 @@ export async function POST(req: Request) {
 
     // Passo 1: Classificar se a pergunta é sobre a empresa
     const itsAboutCompany = await classifyQuestion(message);
+    console.log("É sobre a empresa?:", itsAboutCompany);
 
     if (itsAboutCompany) {
       // Passo 2: Criar embedding e buscar no banco
@@ -31,19 +32,21 @@ export async function POST(req: Request) {
       ]);
 
       if (faq.length > 0) {
+        console.log("Encontrou no banco:", faq[0].resposta);
         return NextResponse.json({ resposta: faq[0].resposta });
       }
 
       // Passo 3: Refinar resposta com ChatGPT se não encontrou no banco
-      const respostaRefinada = await getChatGPTResponse(
+      const refinedAnswer = await getChatGPTResponse(
         `Considere as informações conhecidas da empresa ao responder: ${message}`
       );
-      return NextResponse.json({ resposta: respostaRefinada });
+      console.log("Não encontrou no banco:", refinedAnswer);
+      return NextResponse.json({ resposta: refinedAnswer });
     }
 
     // Passo 4: Se não for sobre a empresa, pergunta direto para o ChatGPT
-    const respostaChatGPT = await getChatGPTResponse(message);
-    return NextResponse.json({ resposta: respostaChatGPT });
+    const chatGPTAnswer = await getChatGPTResponse(message);
+    return NextResponse.json({ resposta: chatGPTAnswer });
   } catch (error) {
     console.log(error);
     return NextResponse.json(
