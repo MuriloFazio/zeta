@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import { Faq } from "@/lib/faq.model";
-import { gerarEmbedding } from "@/lib/openai";
+import { createEmbedding } from "@/lib/openai";
 
 export async function POST(req: Request) {
   try {
@@ -16,7 +16,7 @@ export async function POST(req: Request) {
     }
 
     // Gerar embedding da pergunta
-    const embedding = await gerarEmbedding(pergunta);
+    const embedding = await createEmbedding(pergunta);
 
     // Salvar no MongoDB
     const novaFaq = new Faq({ pergunta, resposta, categoria, embedding });
