@@ -4,7 +4,6 @@ import { TextField, IconButton } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { Container, ChatArea, InputArea, MessageWrapper } from "./styles";
 import React, { useEffect, useState, useRef } from "react";
-import { getChatGPTResponse } from "./connections";
 import { textFormatter } from "../../utils/formatters";
 
 export const Chat: React.FC = () => {
@@ -24,8 +23,21 @@ export const Chat: React.FC = () => {
 
     setLoading(true);
     try {
-      const response = await getChatGPTResponse(userMessage);
-      const botMessage = { role: "assistant", content: response };
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: userMessage }),
+      });
+
+      const data = await response.json();
+
+      const botMessage = {
+        role: "assistant",
+        content: data.resposta || "No response available",
+      };
+
       setMessages((prevMessages) => [...prevMessages, botMessage]);
     } catch (error) {
       const errorMessage = {
