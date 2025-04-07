@@ -1,4 +1,4 @@
-import Chat from "../components/Chat/Chat";
+import { Chat } from "../components/Chat/Chat";
 import { Container } from "./styles";
 import { Header } from "../components/Header";
 
