@@ -2,12 +2,12 @@
 
 import React from "react";
 import { Container } from "./styles";
-import { SignInForm } from "@/components/SignInForm";
+import { SignUpForm } from "@/components/SignUpForm";
 
 const AuthPage: React.FC = () => {
   return (
     <Container>
-      <SignInForm></SignInForm>
+      <SignUpForm></SignUpForm>
     </Container>
   );
 };

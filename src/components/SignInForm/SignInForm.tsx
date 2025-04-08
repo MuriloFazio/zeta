@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button, ErrorMessage, Form, Input, Title } from "./styles";
+import { StyledButton, ErrorMessage, Form, Input, Title } from "./styles";
 
-export const LoginForm: React.FC = () => {
+export const SignInForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -15,7 +15,7 @@ export const LoginForm: React.FC = () => {
       return;
     }
     setError("");
-    // Handle authentication logic here
+    // Handle authentication here
     console.log("Email:", email, "Password:", password);
   };
 
@@ -35,9 +35,9 @@ export const LoginForm: React.FC = () => {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <Button type="submit">Login</Button>
+      <StyledButton type="submit">Login</StyledButton>
     </Form>
   );
 };
 
-export default LoginForm;
+export default SignInForm;

@@ -1,3 +1,3 @@
 export * from "./Chat";
 export * from "./Header";
-export * from "./LoginForm";
+export * from "./SignInForm";
