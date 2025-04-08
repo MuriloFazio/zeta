@@ -1,43 +1,58 @@
 "use client";
 
 import React, { useState } from "react";
-import { StyledButton, ErrorMessage, Form, Input, Title } from "./styles";
+
+import { AuthFormLayout } from "../Auth/AuthFormLayout";
+import { Input } from "../Auth/styles";
 
 export const SignInForm: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
   const [error, setError] = useState("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !password) {
+    if (!formData.email || !formData.password) {
       setError("Please fill in all fields");
       return;
     }
     setError("");
     // Handle authentication here
-    console.log("Email:", email, "Password:", password);
+    console.log("Login data:", formData);
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <Title>Login</Title>
-      {error && <ErrorMessage>{error}</ErrorMessage>}
+    <AuthFormLayout
+      title="Login"
+      onSubmit={handleSubmit}
+      error={error}
+      footerText="Não tem uma conta?"
+      footerLinkText="Cadastre-se"
+      footerLinkHref="/register"
+    >
       <Input
         type="email"
+        name="email"
         placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        value={formData.email}
+        onChange={handleChange}
+        required
       />
       <Input
         type="password"
+        name="password"
         placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        value={formData.password}
+        onChange={handleChange}
+        required
       />
-      <StyledButton type="submit">Login</StyledButton>
-    </Form>
+    </AuthFormLayout>
   );
 };
-
-export default SignInForm;

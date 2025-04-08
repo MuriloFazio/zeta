@@ -1,21 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  StyledButton,
-  ErrorMessage,
-  Form,
-  Input,
-  Title,
-  Divider,
-  Line,
-  LineText,
-  FormWrapper,
-  StyledText,
-  StyledLink,
-  Card,
-} from "../SignInForm/styles";
-import GoogleIcon from "../../assets/icons/web_light_rd_na.svg";
+import { AuthFormLayout } from "../Auth/AuthFormLayout";
+import { Input } from "../Auth/styles";
 
 export const SignUpForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -42,48 +29,38 @@ export const SignUpForm: React.FC = () => {
   };
 
   return (
-    <FormWrapper>
-      <Form onSubmit={handleSubmit}>
-        <Title>Sign Up</Title>
-        {error && <ErrorMessage>{error}</ErrorMessage>}
-        <Input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-        <Input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-        <Input
-          type="password"
-          name="confirmPassword"
-          placeholder="Confirm Password"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          required
-        />
-        <StyledButton type="submit">Crie sua conta</StyledButton>
-        <Divider>
-          <Line />
-          <LineText>ou entre com</LineText>
-          <Line />
-        </Divider>
-        <StyledButton>Google</StyledButton>
-      </Form>
-      <Card>
-        <StyledText>Já tem uma conta?</StyledText>
-        <StyledLink href={"/login"}>Login</StyledLink>
-      </Card>
-    </FormWrapper>
+    <AuthFormLayout
+      title="Sign Up"
+      onSubmit={handleSubmit}
+      error={error}
+      footerText="Já tem uma conta?"
+      footerLinkText="Login"
+      footerLinkHref="/login"
+    >
+      <Input
+        type="email"
+        name="email"
+        placeholder="Email"
+        value={formData.email}
+        onChange={handleChange}
+        required
+      />
+      <Input
+        type="password"
+        name="password"
+        placeholder="Password"
+        value={formData.password}
+        onChange={handleChange}
+        required
+      />
+      <Input
+        type="password"
+        name="confirmPassword"
+        placeholder="Confirm Password"
+        value={formData.confirmPassword}
+        onChange={handleChange}
+        required
+      />
+    </AuthFormLayout>
   );
 };
-
-export default SignUpForm;
