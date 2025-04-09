@@ -3,7 +3,7 @@
 import { styled } from "styled-components";
 import Image from "next/image";
 
-export const HeaderContainer = styled.header`
+export const Container = styled.div`
   position: fixed;
   top: 0;
   width: 100%;
@@ -17,6 +17,7 @@ export const HeaderContainer = styled.header`
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 16px;
 `;
 
 export const LogoWrapper = styled.div`

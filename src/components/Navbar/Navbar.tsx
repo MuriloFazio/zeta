@@ -1,18 +1,18 @@
 "use client";
 
-import { HeaderContainer, LogoWrapper, StyledImage } from "./styles";
+import { Container, LogoWrapper, StyledImage } from "./styles";
 import Link from "next/link";
 import filledLogo from "../../assets/icons/zeta_filled_logo.png";
 
-export const Header: React.FC = () => {
+export const Navbar: React.FC = () => {
   return (
-    <HeaderContainer>
-      <Link href="/">Nova - Assistente Virtual</Link>
+    <Container>
       <LogoWrapper>
         <StyledImage alt="logo" src={filledLogo}></StyledImage>
       </LogoWrapper>
-    </HeaderContainer>
+      <Link href="/">Nova - Assistente Virtual</Link>
+    </Container>
   );
 };
 
-export default Header;
+export default Navbar;
