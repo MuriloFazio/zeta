@@ -1,6 +1,7 @@
 "use client";
 
 import styled from "styled-components";
+import Image from "next/image";
 
 export const Container = styled.div`
   display: flex;
@@ -50,4 +51,8 @@ export const StyledButton = styled.button`
     background-color: #003377;
     color: white;
   }
+`;
+
+export const StyledImage = styled(Image)`
+  border-radius: 50%;
 `;

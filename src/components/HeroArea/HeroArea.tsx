@@ -1,11 +1,19 @@
 import React from "react";
 
-import { Container, Subtitle, Title, StyledButton } from "./styles";
+import {
+  Container,
+  Subtitle,
+  Title,
+  StyledButton,
+  StyledImage,
+} from "./styles";
 import Link from "next/link";
+import logo from "../../assets/icons/zeta_main_logo.png";
 
 export const HeroArea: React.FC = () => {
   return (
     <Container>
+      <StyledImage alt="logo" src={logo} width={300} height={300} />
       <Title>Nova: Sua assistente inteligente</Title>
       <Subtitle>Nova é uma assistente virtual baseada no GPT 3.5</Subtitle>
       <Link href={"/chat"}>
