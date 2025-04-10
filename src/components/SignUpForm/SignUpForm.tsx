@@ -3,9 +3,12 @@
 import React, { useState } from "react";
 import { AuthFormLayout } from "../Auth/AuthFormLayout";
 import { Input } from "../Auth/styles";
+import { useRouter } from "next/navigation";
 
 export const SignUpForm: React.FC = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
+    name: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -17,15 +20,33 @@ export const SignUpForm: React.FC = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
       return;
     }
     setError("");
-    // Handle sign-up logic here
-    console.log("Sign-up successful:", formData);
+
+    const response = await fetch("/api/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      }),
+    });
+
+    if (response.status === 201) {
+      setError("");
+      router.push("/");
+      console.log("User registered successfully");
+    } else if (response.status === 400) {
+      setError("An error occurred. Please try again.");
+    }
   };
 
   return (
@@ -37,6 +58,14 @@ export const SignUpForm: React.FC = () => {
       footerLinkText="Login"
       footerLinkHref="/login"
     >
+      <Input
+        type="name"
+        name="name"
+        placeholder="Name"
+        value={formData.name}
+        onChange={handleChange}
+        required
+      />
       <Input
         type="email"
         name="email"

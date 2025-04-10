@@ -25,11 +25,14 @@ const Message = styled.p`
   margin-bottom: 2rem;
 `;
 
-const HomeLink = styled(Link)`
+const HomeButton = styled(Link)`
   color: #fff;
   font-weight: bold;
   font-size: 1.2rem;
-  text-decoration: underline;
+  background-color: #333;
+  border-radius: 8px;
+  padding: 1rem 2rem;
+  box-shadow: 0 0 10px rgba(9, 233, 20, 0.5);
 `;
 
 export default function NotFound() {
@@ -43,7 +46,7 @@ export default function NotFound() {
       </VideoBackground>
       <Title>404</Title>
       <Message>Página não encontrada.</Message>
-      <HomeLink href="/">Voltar para a Home</HomeLink>
+      <HomeButton href="/">Voltar para a Home</HomeButton>
     </Container>
   );
 }

@@ -1,16 +1,25 @@
 "use client";
 
-import { Container, LogoWrapper, StyledImage } from "./styles";
-import Link from "next/link";
+import {
+  Container,
+  LogoWrapper,
+  StyledImage,
+  ButtonWrapper,
+  StyledButton,
+} from "./styles";
 import filledLogo from "../../assets/icons/zeta_filled_logo.png";
 
 export const Navbar: React.FC = () => {
   return (
     <Container>
-      <LogoWrapper>
+      <LogoWrapper href="/">
         <StyledImage alt="logo" src={filledLogo}></StyledImage>
+        <div>Zeta</div>
       </LogoWrapper>
-      <Link href="/">Nova - Assistente Virtual</Link>
+      <ButtonWrapper>
+        <StyledButton href="/login">Entrar</StyledButton>
+        {/* <StyledButton href="/register">Cadastrar</StyledButton> */}
+      </ButtonWrapper>
     </Container>
   );
 };
