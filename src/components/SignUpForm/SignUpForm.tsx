@@ -14,6 +14,7 @@ export const SignUpForm: React.FC = () => {
     confirmPassword: "",
   });
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -23,35 +24,50 @@ export const SignUpForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
+      setError("Senhas não coincidem");
       return;
     }
+
     setError("");
+    setIsLoading(true);
 
-    const response = await fetch("/api/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-      }),
-    });
+    try {
+      const response = await fetch("/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
 
-    if (response.status === 201) {
-      setError("");
-      router.push("/");
-      console.log("User registered successfully");
-    } else if (response.status === 400) {
-      setError("An error occurred. Please try again.");
+      const data = await response.json();
+
+      if (response.ok) {
+        // Registro bem-sucedido, redirecionar para a página de login
+        router.push(
+          "/login?success=Conta criada com sucesso! Faça login para continuar."
+        );
+      } else {
+        // Mostrar mensagem de erro do servidor
+        setError(
+          data.error || "Ocorreu um erro durante o registro. Tente novamente."
+        );
+      }
+    } catch (err) {
+      console.error("Erro ao registrar:", err);
+      setError("Erro de conexão. Verifique sua internet e tente novamente.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <AuthFormLayout
-      title="Sign Up"
+      title="Cadastro"
       onSubmit={handleSubmit}
       error={error}
       footerText="Já tem uma conta?"
@@ -59,12 +75,13 @@ export const SignUpForm: React.FC = () => {
       footerLinkHref="/login"
     >
       <Input
-        type="name"
+        type="text"
         name="name"
-        placeholder="Name"
+        placeholder="Nome"
         value={formData.name}
         onChange={handleChange}
         required
+        disabled={isLoading}
       />
       <Input
         type="email"
@@ -73,22 +90,25 @@ export const SignUpForm: React.FC = () => {
         value={formData.email}
         onChange={handleChange}
         required
+        disabled={isLoading}
       />
       <Input
         type="password"
         name="password"
-        placeholder="Password"
+        placeholder="Senha"
         value={formData.password}
         onChange={handleChange}
         required
+        disabled={isLoading}
       />
       <Input
         type="password"
         name="confirmPassword"
-        placeholder="Confirm Password"
+        placeholder="Confirmar Senha"
         value={formData.confirmPassword}
         onChange={handleChange}
         required
+        disabled={isLoading}
       />
     </AuthFormLayout>
   );
