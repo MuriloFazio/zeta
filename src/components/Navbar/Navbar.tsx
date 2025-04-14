@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import {
   Container,
@@ -25,12 +25,11 @@ export const Navbar: React.FC = () => {
 
   const handleLogoutClick = () => {
     if (session) {
-      router.push("/api/auth/signout");
+      signOut({ callbackUrl: "/" });
     }
   };
 
   const isLoggedIn = session;
-
   return (
     <Container>
       <LogoWrapper href="/">

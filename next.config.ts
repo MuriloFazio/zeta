@@ -4,6 +4,14 @@ const nextConfig: NextConfig = {
   compiler: {
     styledComponents: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "example.com",
+      },
+    ],
+  },
   webpack(config) {
     config.module.rules.push({
       test: /\.(mp4|webm|ogg)$/,
