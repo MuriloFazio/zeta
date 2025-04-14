@@ -41,7 +41,7 @@ export const ButtonWrapper = styled.div`
   gap: 16px;
 `;
 
-export const StyledButton = styled(Link)`
+export const StyledButton = styled.button`
   color: #fff;
   background-color: #333;
   border-radius: 8px;

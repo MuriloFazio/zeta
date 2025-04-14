@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Nova",
+  title: "Zeta",
   description: "Assistente virtual",
 };
 
