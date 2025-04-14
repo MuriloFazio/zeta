@@ -22,6 +22,7 @@ export const Input = styled.input`
 
 export const StyledButton = styled(Button)`
   color: #fff;
+  text-transform: none;
   background-color: #007bff;
 
   &:hover {
