@@ -15,7 +15,7 @@ export const HeroArea: React.FC = () => {
     <Container>
       <StyledImage alt="logo" src={logo} width={300} height={300} />
       <Title>Zeta: Sua assistente inteligente</Title>
-      <Subtitle>Zeta é uma assistente virtual baseada no GPT 3.5</Subtitle>
+      <Subtitle>Zeta é uma assistente virtual baseada no GPT 4</Subtitle>
       <Link href={"/chat"}>
         <StyledButton>Teste agora</StyledButton>
       </Link>
