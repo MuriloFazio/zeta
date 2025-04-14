@@ -25,17 +25,16 @@ export const AuthFormLayout: React.FC<AuthFormLayoutProps> = ({
   onSubmit,
   error,
 }) => {
-  const onClickHandleGoogle = async () => {
+  const onHandleGoogleSign = async () => {
     try {
       const result = await signIn("google", {
         redirect: false,
         callbackUrl: "/chat",
-      }); // Redirect false to handle the response manually
+      });
       if (result?.error) {
         console.error("Error signing in with Google:", result.error);
       } else {
         console.log("Successfully signed in with Google:", result);
-        // Handle successful sign-in (e.g., redirect to a different page)
       }
     } catch (error) {
       console.error("Error during Google sign-in:", error);
@@ -50,10 +49,17 @@ export const AuthFormLayout: React.FC<AuthFormLayoutProps> = ({
         <StyledButton type="submit">
           {title === "Login" ? "Entrar" : "Crie sua conta"}
         </StyledButton>
-        <AuthDivider />
-        <StyledButton startIcon={<GoogleIcon />} onClick={onClickHandleGoogle}>
-          Google
-        </StyledButton>
+        {title === "Login" && (
+          <>
+            <AuthDivider />
+            <StyledButton
+              startIcon={<GoogleIcon />}
+              onClick={onHandleGoogleSign}
+            >
+              Continue com o Google
+            </StyledButton>
+          </>
+        )}
       </Form>
       <Card>
         <StyledText>{footerText}</StyledText>
