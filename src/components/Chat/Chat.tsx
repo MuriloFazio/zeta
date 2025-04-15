@@ -2,9 +2,14 @@
 
 import { TextField, IconButton } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
+import MicIcon from "@mui/icons-material/Mic";
+import StopCircleIcon from "@mui/icons-material/StopCircle";
 import { Container, ChatArea, InputArea, MessageWrapper } from "./styles";
 import React, { useEffect, useState, useRef } from "react";
 import { textFormatter } from "../../utils/formatters";
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
 
 export const Chat: React.FC = () => {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>(
@@ -14,6 +19,13 @@ export const Chat: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const [isRecording, setIsRecording] = useState(false);
+
+  const { transcript, resetTranscript, browserSupportsSpeechRecognition } =
+    useSpeechRecognition();
+  const startListening = () => {
+    SpeechRecognition.startListening({ continuous: true, language: "pt-BR" });
+  };
 
   const handleSendMessage = async () => {
     if (!userMessage.trim()) return;
@@ -49,6 +61,29 @@ export const Chat: React.FC = () => {
       setLoading(false);
       setUserMessage("");
     }
+  };
+
+  const handleSpeechMessageOn = async () => {
+    if (!browserSupportsSpeechRecognition) {
+      console.log("O navegador não suporta reconhecimento de voz");
+      return null;
+    }
+
+    try {
+      resetTranscript();
+      setIsRecording(true);
+      startListening();
+    } catch (error) {
+      console.error("Erro ao traduzir a voz", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSpeechMessageOff = () => {
+    SpeechRecognition.stopListening();
+    setIsRecording(false);
+    setUserMessage(transcript);
   };
 
   useEffect(() => {
@@ -94,8 +129,15 @@ export const Chat: React.FC = () => {
           onClick={handleSendMessage}
           disabled={loading}
           ref={buttonRef}
+          loading={loading}
         >
           <SendIcon />
+        </IconButton>
+        <IconButton
+          color="secondary"
+          onClick={isRecording ? handleSpeechMessageOff : handleSpeechMessageOn}
+        >
+          {isRecording ? <StopCircleIcon /> : <MicIcon />}
         </IconButton>
       </InputArea>
     </Container>
