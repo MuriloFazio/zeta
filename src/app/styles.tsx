@@ -6,6 +6,17 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background-color: #f5f5f5;
-  font-family: Arial, sans-serif;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const VideoBackground = styled.video`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  opacity: 0.5;
 `;

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Navbar } from "@/components";
+import { NextAuthProvider } from "./providers/sessionProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Nova - Chatbot",
+  title: "Zeta",
   description: "Assistente virtual",
 };
 
@@ -25,7 +27,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+        <NextAuthProvider>
+          <Navbar />
+          <main>{children}</main>
+        </NextAuthProvider>
       </body>
     </html>
   );
