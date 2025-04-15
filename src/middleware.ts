@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export default withAuth(
   // Função executada apenas se o usuário não estiver autenticado
-  function middleware(req) {
+  function middleware() {
     // Você pode adicionar lógica personalizada aqui
     return NextResponse.next();
   },
