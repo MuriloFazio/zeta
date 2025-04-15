@@ -24,7 +24,6 @@ export const Chat: React.FC = () => {
   const { transcript, resetTranscript, browserSupportsSpeechRecognition } =
     useSpeechRecognition();
   const startListening = () => {
-    console.log("Iniciando reconhecimento de voz");
     SpeechRecognition.startListening({ continuous: true, language: "pt-BR" });
   };
 
@@ -71,7 +70,7 @@ export const Chat: React.FC = () => {
     }
 
     try {
-      transcript && resetTranscript();
+      resetTranscript();
       setIsRecording(true);
       startListening();
     } catch (error) {
@@ -82,7 +81,6 @@ export const Chat: React.FC = () => {
   };
 
   const handleSpeechMessageOff = () => {
-    console.log("Parando reconhecimento de voz");
     SpeechRecognition.stopListening();
     setIsRecording(false);
     setUserMessage(transcript);
