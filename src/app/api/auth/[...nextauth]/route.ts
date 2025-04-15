@@ -51,7 +51,6 @@ const handler = NextAuth({
             id: user._id.toString(),
             email: user.email,
             name: user.name || "Usuário",
-            // Adicione quaisquer outros campos que você precisar
           };
 
           return userWithoutPassword;
@@ -67,7 +66,6 @@ const handler = NextAuth({
     async session({ session, token }) {
       if (token && session.user) {
         session.user.id = token.sub || "";
-        // Adicione outros dados customizados se necessário
       }
       return session;
     },
@@ -75,13 +73,12 @@ const handler = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.sub = user.id;
-        // Adicione outros dados customizados se necessário
       }
       return token;
     },
   },
   pages: {
-    signIn: "/auth/signin",
+    signIn: "/login",
   },
   secret: process.env.NEXTAUTH_SECRET,
   session: {

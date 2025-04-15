@@ -13,7 +13,7 @@ export default function Home() {
   useEffect(() => {
     // Redireciona para a página de login se não estiver autenticado
     if (status === "unauthenticated") {
-      router.push("/login?callbackUrl=/chat");
+      router.push("/login");
     }
   }, [status, router]);
 
