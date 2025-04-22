@@ -5,10 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const Container = styled.div`
-  position: fixed;
-  top: 0;
   width: 100%;
-  z-index: 1000;
   background-color: #333;
   color: white;
   padding: 0 16px;
