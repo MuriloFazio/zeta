@@ -11,6 +11,7 @@ import {
   MessageWrapper,
   StyledTextField,
   InputWrapper,
+  MessagesContainer,
 } from "./styles";
 import React, { useEffect, useState, useRef } from "react";
 import { textFormatter } from "../../utils/formatters";
@@ -117,9 +118,11 @@ export const Chat: React.FC = () => {
       <ChatArea>
         {loading && <div>Digitando...</div>}
         {messages.map((message, index) => (
-          <MessageWrapper isUser={message.role === "user"} key={index}>
-            <div key={index}>{textFormatter(message.content)}</div>
-          </MessageWrapper>
+          <MessagesContainer key={index}>
+            <MessageWrapper isUser={message.role === "user"} key={index}>
+              <div key={index}>{textFormatter(message.content)}</div>
+            </MessageWrapper>
+          </MessagesContainer>
         ))}
       </ChatArea>
       <InputArea>
