@@ -1,10 +1,18 @@
 "use client";
 
-import { TextField, IconButton } from "@mui/material";
+import { IconButton } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import MicIcon from "@mui/icons-material/Mic";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
-import { Container, ChatArea, InputArea, MessageWrapper } from "./styles";
+import {
+  Container,
+  ChatArea,
+  InputArea,
+  MessageWrapper,
+  StyledTextField,
+  InputWrapper,
+  MessagesContainer,
+} from "./styles";
 import React, { useEffect, useState, useRef } from "react";
 import { textFormatter } from "../../utils/formatters";
 import SpeechRecognition, {
@@ -110,35 +118,45 @@ export const Chat: React.FC = () => {
       <ChatArea>
         {loading && <div>Digitando...</div>}
         {messages.map((message, index) => (
-          <MessageWrapper isUser={message.role === "user"} key={index}>
-            <div key={index}>{textFormatter(message.content)}</div>
-          </MessageWrapper>
+          <MessagesContainer key={index}>
+            <MessageWrapper isUser={message.role === "user"} key={index}>
+              <div key={index}>{textFormatter(message.content)}</div>
+            </MessageWrapper>
+          </MessagesContainer>
         ))}
       </ChatArea>
       <InputArea>
-        <TextField
-          fullWidth
-          variant="outlined"
-          placeholder="Digite sua mensagem..."
-          value={userMessage}
-          onChange={(e) => setUserMessage(e.target.value)}
-          ref={inputRef}
-        />
-        <IconButton
-          color="primary"
-          onClick={handleSendMessage}
-          disabled={loading}
-          ref={buttonRef}
-          loading={loading}
-        >
-          <SendIcon />
-        </IconButton>
-        <IconButton
-          color="secondary"
-          onClick={isRecording ? handleSpeechMessageOff : handleSpeechMessageOn}
-        >
-          {isRecording ? <StopCircleIcon /> : <MicIcon />}
-        </IconButton>
+        <InputWrapper>
+          <StyledTextField
+            fullWidth
+            multiline
+            maxRows={4}
+            variant="outlined"
+            placeholder="Digite sua mensagem..."
+            value={userMessage}
+            onChange={(e) => setUserMessage(e.target.value)}
+            ref={inputRef}
+          />
+          <IconButton
+            onClick={handleSendMessage}
+            disabled={loading}
+            ref={buttonRef}
+            loading={loading}
+          >
+            <SendIcon htmlColor="green" />
+          </IconButton>
+          <IconButton
+            onClick={
+              isRecording ? handleSpeechMessageOff : handleSpeechMessageOn
+            }
+          >
+            {isRecording ? (
+              <StopCircleIcon htmlColor="red" />
+            ) : (
+              <MicIcon htmlColor="green" />
+            )}
+          </IconButton>
+        </InputWrapper>
       </InputArea>
     </Container>
   );
