@@ -2,7 +2,6 @@
 
 import styled from "styled-components";
 import Link from "next/link";
-import { VideoBackground } from "./styles";
 
 const Container = styled.div`
   display: flex;
@@ -33,6 +32,17 @@ const HomeButton = styled(Link)`
   border-radius: 8px;
   padding: 1rem 2rem;
   box-shadow: 0 0 10px rgba(9, 233, 20, 0.5);
+`;
+
+const VideoBackground = styled.video`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  opacity: 0.2;
 `;
 
 export default function NotFound() {
