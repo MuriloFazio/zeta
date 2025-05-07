@@ -1,6 +1,7 @@
 "use client";
 
 import styled from "styled-components";
+import Image from "next/image";
 
 export const Container = styled.div`
   display: flex;
@@ -10,7 +11,7 @@ export const Container = styled.div`
   justify-content: center;
 `;
 
-export const VideoBackground = styled.video`
+export const BackgroundImage = styled(Image)`
   position: absolute;
   top: 0;
   left: 0;
@@ -18,5 +19,5 @@ export const VideoBackground = styled.video`
   height: 100%;
   object-fit: cover;
   z-index: -1;
-  opacity: 0.5;
+  opacity: 0.2;
 `;
