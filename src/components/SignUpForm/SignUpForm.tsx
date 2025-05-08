@@ -28,6 +28,11 @@ export const SignUpForm: React.FC = () => {
       return;
     }
 
+    if (formData.password.length < 6) {
+      setError("A senha deve ter pelo menos 6 caracteres");
+      return;
+    }
+
     setError("");
     setIsLoading(true);
 
