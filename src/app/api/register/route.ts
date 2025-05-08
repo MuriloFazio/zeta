@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { createUser } from "@/queries/users";
-import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/mongodb";
 
 export const POST = async (request: Request) => {
@@ -11,20 +10,28 @@ export const POST = async (request: Request) => {
   }
 
   await connectDB();
-  const hashedPassword = await bcrypt.hash(password, 10);
+  // const hashedPassword = await bcrypt.hash(password, 10);
 
   const newUser = {
     name,
     email,
-    password: hashedPassword,
+    password,
   };
 
   try {
     await createUser(newUser);
   } catch (error) {
     console.error("Error creating user:", error);
-    return new NextResponse("Error creating user", { status: 500 });
-  }
 
-  return new NextResponse("User registered successfully", { status: 201 });
+    return NextResponse.json(
+      {
+        error: "Erro ao criar usuário",
+      },
+      { status: 500 }
+    );
+  }
+  return NextResponse.json(
+    { message: "User registered successfully" },
+    { status: 201 }
+  );
 };
