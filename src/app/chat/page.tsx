@@ -21,6 +21,15 @@ export default function Home() {
     return null;
   }
 
+  if (session.user.role !== "pro" && session.user.role !== "admin") {
+    return (
+      <Container>
+        <h1>Olá, {session.user.name}</h1>
+        <p>Você ainda não tem permissão para acessar esta página.</p>
+      </Container>
+    );
+  }
+
   return (
     <Container>
       <Chat />
