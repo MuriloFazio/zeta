@@ -13,16 +13,14 @@ export const Info = styled.p`
 
 export const TitleImageWrapper = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  margin-bottom: 20px;
   text-align: center;
+  gap: 10px;
+  margin-bottom: 20px;
 `;
 
 export const StyledImage = styled(Image)`
   border-radius: 50%;
-  display: none;
-  @media (min-width: 768px) {
-    display: block;
-  }
 `;
