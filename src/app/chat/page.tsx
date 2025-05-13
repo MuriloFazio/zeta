@@ -1,10 +1,11 @@
 "use client";
 
 import { Chat } from "../../components/Chat/Chat";
-import { Container } from "../styles";
+import { PageContainer } from "../styles";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { AccessDeniedMessage } from "../../components/AccessDeniedMessage/AccessDeniedMessage";
 
 export default function Home() {
   const { data: session, status } = useSession();
@@ -23,16 +24,18 @@ export default function Home() {
 
   if (session.user.role !== "pro" && session.user.role !== "admin") {
     return (
-      <Container>
-        <h1>Olá, {session.user.name}</h1>
-        <p>Você ainda não tem permissão para acessar esta página.</p>
-      </Container>
+      <PageContainer>
+        <AccessDeniedMessage
+          name={session.user.name!}
+          src={session.user.image!}
+        ></AccessDeniedMessage>
+      </PageContainer>
     );
   }
 
   return (
-    <Container>
+    <PageContainer>
       <Chat />
-    </Container>
+    </PageContainer>
   );
 }
