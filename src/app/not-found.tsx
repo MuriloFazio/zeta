@@ -8,7 +8,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100dvh;
+  height: calc(100dvh - 50px);
   text-align: center;
   padding: 2rem;
   color: #fff;
