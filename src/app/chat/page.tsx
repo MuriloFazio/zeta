@@ -5,7 +5,7 @@ import { PageContainer } from "../styles";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { AccessDeniedMessage } from "../../components/AccessDeniedMessage/AccessDeniedMessage";
+import { UserAccessInfo } from "../../components/UserAccessInfo/UserAccessInfo";
 
 export default function Home() {
   const { data: session, status } = useSession();
@@ -25,10 +25,11 @@ export default function Home() {
   if (session.user.role !== "pro" && session.user.role !== "admin") {
     return (
       <PageContainer>
-        <AccessDeniedMessage
+        <UserAccessInfo
           name={session.user.name!}
           src={session.user.image!}
-        ></AccessDeniedMessage>
+          infoText="Você ainda não tem permissão para acessar esta página."
+        ></UserAccessInfo>
       </PageContainer>
     );
   }

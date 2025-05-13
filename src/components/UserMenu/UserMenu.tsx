@@ -35,6 +35,11 @@ export const UserMenu = () => {
     setAnchorEl(null);
   };
 
+  const handleSettings = () => {
+    setAnchorEl(null);
+    router.push("/settings");
+  };
+
   if (!session) {
     return null;
   }
@@ -72,7 +77,7 @@ export const UserMenu = () => {
 
         <Divider />
 
-        <MenuItem onClick={() => router.push("/settings")}>
+        <MenuItem onClick={handleSettings}>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
