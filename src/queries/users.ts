@@ -12,3 +12,9 @@ export async function createUser(user: {
     throw error;
   }
 }
+
+//TODO
+// Update user name
+// Update user email
+// Update user password
+// Update user role

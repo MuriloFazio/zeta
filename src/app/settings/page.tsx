@@ -1,11 +1,17 @@
 "use client";
 
-import { PageContainer } from "./styles";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { UserAccessInfo } from "@/components/UserAccessInfo/UserAccessInfo";
-import { UserInfoContainer } from "./styles";
+import {
+  UserInfoContainer,
+  Container,
+  Description,
+  Title,
+  PageContainer,
+  ContainerSeparator,
+} from "./styles";
 
 export default function Settings() {
   const { data: session, status } = useSession();
@@ -30,6 +36,25 @@ export default function Settings() {
           infoText="Gerencie seu perfil"
         />
       </UserInfoContainer>
+
+      <ContainerSeparator />
+
+      <Container>
+        <Title>Configurações</Title>
+        <Description>
+          Aqui você pode gerenciar suas configurações de conta e preferências.
+        </Description>
+        <Description>
+          Em breve, você poderá personalizar sua experiência de uso do ChatGPT.
+        </Description>
+      </Container>
+
+      <ContainerSeparator />
+
+      <Container>
+        <Title>Pagamentos e assinaturas</Title>
+        <Description>Em breve você também podera ser um membro pro</Description>
+      </Container>
     </PageContainer>
   );
 }
