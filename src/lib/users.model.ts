@@ -19,6 +19,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Nome é obrigatório"],
   },
+  role: {
+    type: String,
+    enum: ["standard", "pro", "admin"],
+    default: "standard",
+  },
   createdAt: {
     type: Date,
     default: Date.now,

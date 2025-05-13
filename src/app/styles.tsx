@@ -3,7 +3,7 @@
 import styled from "styled-components";
 import Image from "next/image";
 
-export const Container = styled.div`
+export const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: calc(100vh - 50px);
