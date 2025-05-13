@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import {
   Container,
@@ -10,6 +10,7 @@ import {
   StyledButton,
 } from "./styles";
 import filledLogo from "../../assets/icons/zeta_filled_logo.png";
+import { UserMenu } from "../UserMenu/UserMenu";
 
 export const Navbar: React.FC = () => {
   const { data: session } = useSession();
@@ -23,12 +24,6 @@ export const Navbar: React.FC = () => {
     }
   };
 
-  const handleLogoutClick = () => {
-    if (session) {
-      signOut({ callbackUrl: "/" });
-    }
-  };
-
   const isLoggedIn = session;
   return (
     <Container>
@@ -38,7 +33,7 @@ export const Navbar: React.FC = () => {
       </LogoWrapper>
       <ButtonWrapper>
         {isLoggedIn ? (
-          <StyledButton onClick={handleLogoutClick}>Sair</StyledButton>
+          <UserMenu />
         ) : (
           <StyledButton onClick={handleLoginClick}>Entrar</StyledButton>
         )}
