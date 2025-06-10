@@ -12,7 +12,7 @@ const FaqSchema = new Schema<IFaq>({
   pergunta: { type: String, required: true },
   resposta: { type: String, required: true },
   categoria: { type: String },
-  embedding: { type: [Number], required: true }, // Adicionando campo de embedding
+  embedding: { type: [Number], required: true },
   atualizadoEm: { type: Date, default: Date.now },
 });
 
