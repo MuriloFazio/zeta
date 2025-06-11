@@ -18,6 +18,10 @@ import { textFormatter } from "../../utils/formatters";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
+import { fetchMessages } from "@/lib/messages";
+import { useSession } from "next-auth/react";
+import { saveMessage } from "@/lib/messages";
+
 
 export const Chat: React.FC = () => {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>(
@@ -35,41 +39,60 @@ export const Chat: React.FC = () => {
     SpeechRecognition.startListening({ continuous: true, language: "pt-BR" });
   };
 
+  const { data: session } = useSession();
+
   const handleSendMessage = async () => {
-    if (!userMessage.trim()) return;
+  if (!userMessage.trim()) return;
 
-    const newMessage = { role: "user", content: userMessage };
-    setMessages((prevMessages) => [...prevMessages, newMessage]);
+  const newMessage = { role: "user", content: userMessage };
+  setMessages((prev) => [...prev, newMessage]);
 
-    setLoading(true);
-    try {
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ message: userMessage }),
-      });
+  if (!session?.user?.id) return;
+  const userId = session.user.id;
 
-      const data = await response.json();
+  await saveMessage({
+    userId,
+    model: "gpt-4",
+    role: "user",
+    content: userMessage,
+  });
 
-      const botMessage = {
-        role: "assistant",
-        content: data.resposta || "No response available",
-      };
+  setLoading(true);
 
-      setMessages((prevMessages) => [...prevMessages, botMessage]);
-    } catch (error) {
-      const errorMessage = {
-        role: "system",
-        content: `Erro ao obter resposta do ChatGPT ${error}`,
-      };
-      setMessages((prevMessages) => [...prevMessages, errorMessage]);
-    } finally {
-      setLoading(false);
-      setUserMessage("");
-    }
-  };
+  try {
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: userMessage }),
+    });
+
+    const data = await res.json();
+
+    const botMessage = {
+      role: "assistant",
+      content: data.resposta || "No response available",
+    };
+
+    setMessages((prev) => [...prev, botMessage]);
+
+    await saveMessage({
+      userId,
+      model: "gpt-4",
+      role: "assistant",
+      content: botMessage.content,
+    });
+  } catch (error) {
+    const errorMessage = {
+      role: "system",
+      content: `Erro ao obter resposta: ${error}`,
+    };
+    setMessages((prev) => [...prev, errorMessage]);
+  } finally {
+    setLoading(false);
+    setUserMessage("");
+  }
+};
+
 
   const handleSpeechMessageOn = async () => {
     if (!browserSupportsSpeechRecognition) {
@@ -112,6 +135,24 @@ export const Chat: React.FC = () => {
       }
     };
   }, []);
+
+  useEffect(() => {
+
+  const loadMessages = async () => {
+    if (!session?.user?.id) return;
+
+    const history = await fetchMessages(session.user.id, "gpt-4");
+
+    const formattedMessages = history.map((msg: { role: string; content: string }) => ({
+      role: msg.role,
+      content: msg.content,
+    }));
+
+    setMessages(formattedMessages);
+  };
+
+  loadMessages();
+}, [session]);
 
   return (
     <Container>
