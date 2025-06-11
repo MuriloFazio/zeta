@@ -21,7 +21,7 @@ import SpeechRecognition, {
 import { fetchMessages } from "@/lib/messages";
 import { useSession } from "next-auth/react";
 import { saveMessage } from "@/lib/messages";
-
+import { ModelSelector } from "../ModelSelector/ModelSelector";
 
 export const Chat: React.FC = () => {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>(
@@ -154,6 +154,7 @@ export const Chat: React.FC = () => {
 
   return (
     <Container>
+      <ModelSelector onModelChange={() => undefined}/>
       <ChatArea>
         {loading && <div>Digitando...</div>}
         {messages.map((message, index) => (
