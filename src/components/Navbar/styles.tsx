@@ -28,7 +28,6 @@ export const StyledImage = styled(Image)`
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 `;
 
 export const ButtonWrapper = styled.div`
@@ -43,5 +42,5 @@ export const StyledButton = styled.button`
   border-radius: 8px;
   padding: 8px;
   font-size: 12px;
-  box-shadow: 0 0 8px rgba(9, 233, 20, 0.5);
+  border: solid 1px #fff; 
 `;

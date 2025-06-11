@@ -20,7 +20,6 @@ export const ChatArea = styled.div`
   flex-direction: column;
   padding: 16px 16px 84px 16px;
   align-items: center;
-  justify-content: flex-end;
 `;
 
 export const MessagesContainer = styled.div`

@@ -11,6 +11,7 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: 330px;
 `;
 
 export const Title = styled.h1`
