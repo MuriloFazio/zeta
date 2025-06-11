@@ -38,7 +38,6 @@ export const Chat: React.FC = () => {
   const startListening = () => {
     SpeechRecognition.startListening({ continuous: true, language: "pt-BR" });
   };
-
   const { data: session } = useSession();
 
   const handleSendMessage = async () => {
@@ -92,7 +91,6 @@ export const Chat: React.FC = () => {
     setUserMessage("");
   }
 };
-
 
   const handleSpeechMessageOn = async () => {
     if (!browserSupportsSpeechRecognition) {

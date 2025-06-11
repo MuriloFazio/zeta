@@ -13,8 +13,9 @@ import {
   Card,
 } from "./styles";
 import { AuthDivider } from "./AuthDivider";
-import GoogleIcon from "@mui/icons-material/Google";
 import { signIn } from "next-auth/react";
+import Image from "next/image";
+import googleIcon from "../../assets/icons/google_icon_light.svg"
 
 export const AuthFormLayout: React.FC<AuthFormLayoutProps> = ({
   title,
@@ -53,7 +54,7 @@ export const AuthFormLayout: React.FC<AuthFormLayoutProps> = ({
           <>
             <AuthDivider />
             <StyledButton
-              startIcon={<GoogleIcon />}
+              startIcon={<Image alt="google icon" src={googleIcon} width={24} height={24}/>}
               onClick={onHandleGoogleSign}
             >
               Continue com o Google
