@@ -1,3 +1,5 @@
+import { AIModel, MessageRole } from "@/types/model";
+
 export async function fetchMessages(userId: string, model: string) {
   const response = await fetch(`/api/messages/${model}?userId=${userId}`);
   if (!response.ok) throw new Error("Erro ao buscar mensagens");
@@ -11,8 +13,8 @@ export async function saveMessage({
   content,
 }: {
   userId: string;
-  model: "gpt-4" | "claude" | "gemini";
-  role: "user" | "assistant" | "system";
+  model: AIModel;
+  role: MessageRole;
   content: string;
 }) {
   await fetch("/api/messages", {

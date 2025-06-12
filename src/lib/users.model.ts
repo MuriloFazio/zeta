@@ -28,6 +28,11 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  preferredModel: {
+  type: String,
+  enum: ["gpt-4", "claude", "gemini"],
+  default: "gpt-4",
+},
 });
 
 // Middleware para criptografar a senha antes de salvar

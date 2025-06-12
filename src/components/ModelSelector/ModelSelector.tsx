@@ -1,23 +1,22 @@
-import React, { useState } from "react";
+import React from "react";
 import { StyledSelect, StyledMenuItem, IconWrapper } from "./styles";
 import { ModelSelectorProps } from "./types";
 import CloudeIcon from "../Icons/ClaudeIcon";
 import ChatGPTIcon from "../Icons/ChatGPTIcon";
 import GeminiIcon from "../Icons/GeminiIcon";
+import { AIModel } from "@/types/model";
 
 export const ModelSelector: React.FC<ModelSelectorProps> = ({
-  defaultModel = "gpt-4",
+  onModelChange,
+  selectedModel = "gpt-4",
 }) => {
-  const [selectedModel, setSelectedModel] = useState(defaultModel);
-
-  const handleChange = (model: string) => {
-    setSelectedModel(model);
-  };
+  
 
   return (
     <StyledSelect 
+      aria-label="Selecionar modelo de IA"
       value={selectedModel}
-      onChange={(event) => handleChange(event.target.value as string)}
+      onChange={(event) => onModelChange(event.target.value as AIModel)}
       autoWidth
       MenuProps={{
         PaperProps: {

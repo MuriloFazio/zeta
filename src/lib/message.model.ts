@@ -1,9 +1,10 @@
 import mongoose, { Schema } from "mongoose";
+import { AIModel, MessageRole } from "@/types/model";
 
 export interface Message{
   userId: string;
-  model: "gpt-4" | "claude" | "gemini";
-  role: "user" | "assistant" | "system";
+  model: AIModel;
+  role: MessageRole;
   content: string;
   createdAt: Date;
 }

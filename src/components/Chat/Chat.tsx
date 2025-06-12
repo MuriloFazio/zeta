@@ -21,6 +21,9 @@ import SpeechRecognition, {
 import { fetchMessages } from "@/lib/messages";
 import { useSession } from "next-auth/react";
 import { saveMessage } from "@/lib/messages";
+import { getPreferredModel } from "@/utils/users";
+import { ModelSelector } from "../ModelSelector/ModelSelector";
+import { AIModel } from "@/types/model";
 
 export const Chat: React.FC = () => {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>(
@@ -38,6 +41,18 @@ export const Chat: React.FC = () => {
     SpeechRecognition.startListening({ continuous: true, language: "pt-BR" });
   };
   const { data: session } = useSession();
+  const [selectedModel, setSelectedModel] = useState<AIModel>("gpt-4");
+
+  const handleModelChange = async (newModel: AIModel) => {
+  setSelectedModel(newModel);
+
+  await fetch("/api/settings/model", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ model: selectedModel }),
+  });
+};
+
 
   const handleSendMessage = async () => {
     if (!userMessage.trim()) return;
@@ -50,7 +65,7 @@ export const Chat: React.FC = () => {
 
     await saveMessage({
       userId,
-      model: "gpt-4",
+      model: selectedModel,
       role: "user",
       content: userMessage,
     });
@@ -75,7 +90,7 @@ export const Chat: React.FC = () => {
 
       await saveMessage({
         userId,
-        model: "gpt-4",
+        model: selectedModel,
         role: "assistant",
         content: botMessage.content,
       });
@@ -138,7 +153,10 @@ export const Chat: React.FC = () => {
     const loadMessages = async () => {
       if (!session?.user?.id) return;
 
-      const history = await fetchMessages(session.user.id, "gpt-4");
+      const model = await getPreferredModel();
+      setSelectedModel(model);
+
+      const history = await fetchMessages(session.user.id, selectedModel);
 
       const formattedMessages = history.map((msg: { role: string; content: string }) => ({
         role: msg.role,
@@ -153,6 +171,11 @@ export const Chat: React.FC = () => {
 
   return (
     <Container>
+      <div style={{display: "flex", justifyContent: "flex-end", padding: "10px"}}>
+        <ModelSelector
+          onModelChange={handleModelChange} selectedModel={selectedModel}>
+        </ModelSelector>
+      </div>
       <ChatArea>
         {loading && <div>Digitando...</div>}
         {messages.map((message, index) => (
@@ -181,7 +204,6 @@ export const Chat: React.FC = () => {
           onClick={handleSendMessage}
           disabled={loading}
           ref={buttonRef}
-          loading={loading}
         >
           <SendIcon htmlColor="green" />
         </IconButton>
