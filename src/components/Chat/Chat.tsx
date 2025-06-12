@@ -21,7 +21,6 @@ import SpeechRecognition, {
 import { fetchMessages } from "@/lib/messages";
 import { useSession } from "next-auth/react";
 import { saveMessage } from "@/lib/messages";
-import { ModelSelector } from "../ModelSelector/ModelSelector";
 
 export const Chat: React.FC = () => {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>(
@@ -41,56 +40,56 @@ export const Chat: React.FC = () => {
   const { data: session } = useSession();
 
   const handleSendMessage = async () => {
-  if (!userMessage.trim()) return;
+    if (!userMessage.trim()) return;
 
-  const newMessage = { role: "user", content: userMessage };
-  setMessages((prev) => [...prev, newMessage]);
+    const newMessage = { role: "user", content: userMessage };
+    setMessages((prev) => [...prev, newMessage]);
 
-  if (!session?.user?.id) return;
-  const userId = session.user.id;
-
-  await saveMessage({
-    userId,
-    model: "gpt-4",
-    role: "user",
-    content: userMessage,
-  });
-
-  setLoading(true);
-
-  try {
-    const res = await fetch("/api/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: userMessage }),
-    });
-
-    const data = await res.json();
-
-    const botMessage = {
-      role: "assistant",
-      content: data.resposta || "No response available",
-    };
-
-    setMessages((prev) => [...prev, botMessage]);
+    if (!session?.user?.id) return;
+    const userId = session.user.id;
 
     await saveMessage({
       userId,
       model: "gpt-4",
-      role: "assistant",
-      content: botMessage.content,
+      role: "user",
+      content: userMessage,
     });
-  } catch (error) {
-    const errorMessage = {
-      role: "system",
-      content: `Erro ao obter resposta: ${error}`,
-    };
-    setMessages((prev) => [...prev, errorMessage]);
-  } finally {
-    setLoading(false);
-    setUserMessage("");
-  }
-};
+
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userMessage }),
+      });
+
+      const data = await res.json();
+
+      const botMessage = {
+        role: "assistant",
+        content: data.resposta || "No response available",
+      };
+
+      setMessages((prev) => [...prev, botMessage]);
+
+      await saveMessage({
+        userId,
+        model: "gpt-4",
+        role: "assistant",
+        content: botMessage.content,
+      });
+    } catch (error) {
+      const errorMessage = {
+        role: "system",
+        content: `Erro ao obter resposta: ${error}`,
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
+      setLoading(false);
+      setUserMessage("");
+    }
+  };
 
   const handleSpeechMessageOn = async () => {
     if (!browserSupportsSpeechRecognition) {
@@ -136,25 +135,24 @@ export const Chat: React.FC = () => {
 
   useEffect(() => {
 
-  const loadMessages = async () => {
-    if (!session?.user?.id) return;
+    const loadMessages = async () => {
+      if (!session?.user?.id) return;
 
-    const history = await fetchMessages(session.user.id, "gpt-4");
+      const history = await fetchMessages(session.user.id, "gpt-4");
 
-    const formattedMessages = history.map((msg: { role: string; content: string }) => ({
-      role: msg.role,
-      content: msg.content,
-    }));
+      const formattedMessages = history.map((msg: { role: string; content: string }) => ({
+        role: msg.role,
+        content: msg.content,
+      }));
 
-    setMessages(formattedMessages);
-  };
+      setMessages(formattedMessages);
+    };
 
-  loadMessages();
-}, [session]);
+    loadMessages();
+  }, [session]);
 
   return (
     <Container>
-      <ModelSelector onModelChange={() => undefined}/>
       <ChatArea>
         {loading && <div>Digitando...</div>}
         {messages.map((message, index) => (
@@ -177,26 +175,27 @@ export const Chat: React.FC = () => {
             onChange={(e) => setUserMessage(e.target.value)}
             ref={inputRef}
           />
-          <IconButton
-            onClick={handleSendMessage}
-            disabled={loading}
-            ref={buttonRef}
-            loading={loading}
-          >
-            <SendIcon htmlColor="green" />
-          </IconButton>
-          <IconButton
-            onClick={
-              isRecording ? handleSpeechMessageOff : handleSpeechMessageOn
-            }
-          >
-            {isRecording ? (
-              <StopCircleIcon htmlColor="red" />
-            ) : (
-              <MicIcon htmlColor="green" />
-            )}
-          </IconButton>
+
         </InputWrapper>
+        <IconButton
+          onClick={handleSendMessage}
+          disabled={loading}
+          ref={buttonRef}
+          loading={loading}
+        >
+          <SendIcon htmlColor="green" />
+        </IconButton>
+        <IconButton
+          onClick={
+            isRecording ? handleSpeechMessageOff : handleSpeechMessageOn
+          }
+        >
+          {isRecording ? (
+            <StopCircleIcon htmlColor="red" />
+          ) : (
+            <MicIcon htmlColor="green" />
+          )}
+        </IconButton>
       </InputArea>
     </Container>
   );

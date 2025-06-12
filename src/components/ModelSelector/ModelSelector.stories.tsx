@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react';
-
 import { ModelSelector } from "./ModelSelector";
 
 const meta = {
@@ -7,16 +6,15 @@ const meta = {
   component: ModelSelector,
   tags: ['autodocs'],
   parameters: {
-    layout: 'fullscreen',
+    layout: 'centered',
   },
   args: {
-    onModelChange: () => {
-      console.log("Model changed");
-    },
+    defaultModel: 'gpt-4',
   },
 } satisfies Meta<typeof ModelSelector>;
 
 export default meta;
+
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
