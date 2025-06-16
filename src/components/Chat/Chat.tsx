@@ -49,7 +49,7 @@ export const Chat: React.FC = () => {
   await fetch("/api/settings/model", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ model: selectedModel }),
+    body: JSON.stringify({ model: newModel }),
   });
 };
 
@@ -156,7 +156,7 @@ export const Chat: React.FC = () => {
       const model = await getPreferredModel();
       setSelectedModel(model);
 
-      const history = await fetchMessages(session.user.id, selectedModel);
+      const history = await fetchMessages(session.user.id, model);
 
       const formattedMessages = history.map((msg: { role: string; content: string }) => ({
         role: msg.role,
