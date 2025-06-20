@@ -24,6 +24,7 @@ import { saveMessage } from "@/lib/messages";
 import { getPreferredModel } from "@/utils/users";
 import { ModelSelector } from "../ModelSelector/ModelSelector";
 import { AIModel } from "@/types/model";
+import { useQuery } from "@tanstack/react-query";
 
 export const Chat: React.FC = () => {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>(
@@ -34,7 +35,6 @@ export const Chat: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [isRecording, setIsRecording] = useState(false);
-
   const { transcript, resetTranscript, browserSupportsSpeechRecognition } =
     useSpeechRecognition();
   const startListening = () => {
@@ -42,6 +42,13 @@ export const Chat: React.FC = () => {
   };
   const { data: session } = useSession();
   const [selectedModel, setSelectedModel] = useState<AIModel>("gpt-4");
+  
+  const { data: preferredModel } = useQuery({
+    queryKey: ["preferredModel"],
+    queryFn: getPreferredModel,
+  });
+
+  console.log("query. data: ", preferredModel);
 
   const handleModelChange = async (newModel: AIModel) => {
   setSelectedModel(newModel);
@@ -152,7 +159,7 @@ export const Chat: React.FC = () => {
 
     const loadMessages = async () => {
       if (!session?.user?.id) return;
-
+      
       const model = await getPreferredModel();
       setSelectedModel(model);
 
@@ -177,7 +184,7 @@ export const Chat: React.FC = () => {
         </ModelSelector>
       </div>
       <ChatArea>
-        {loading && <div>Digitando...</div>}
+        {loading && <div>⌛ Digitando...</div>}
         {messages.map((message, index) => (
           <MessagesContainer key={index}>
             <MessageWrapper isUser={message.role === "user"} key={index}>
