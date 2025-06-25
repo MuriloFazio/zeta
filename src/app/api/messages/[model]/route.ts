@@ -9,12 +9,13 @@ export async function GET(
     await connectDB();
 
     const userId = req.nextUrl.searchParams.get("userId");
+    const model = req.nextUrl.pathname.split("/").pop();
 
     if (!userId) {
       return NextResponse.json({ error: "Parâmetros inválidos." }, { status: 400 });
     }
 
-    const messages = await Message.find({ userId, model: 'gpt-4' }).sort({ createdAt: 1 });
+    const messages = await Message.find({ userId, model }).sort({ createdAt: 1 });
 
     return NextResponse.json(messages);
   } catch (error) {
