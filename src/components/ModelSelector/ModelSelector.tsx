@@ -1,17 +1,15 @@
 import React from "react";
 import { StyledSelect, StyledMenuItem, IconWrapper } from "./styles";
 import { ModelSelectorProps } from "./types";
-import CloudeIcon from "../Icons/ClaudeIcon";
-import ChatGPTIcon from "../Icons/ChatGPTIcon";
-import GeminiIcon from "../Icons/GeminiIcon";
 import { AIModel } from "@/types/model";
+import {MODEL_OPTIONS} from "./ModelSelectorOptions";
 
 export const ModelSelector: React.FC<ModelSelectorProps> = ({
   onModelChange,
-  selectedModel = "gpt-4",
+  selectedModel,
+  options = MODEL_OPTIONS,
 }) => {
   
-
   return (
     <StyledSelect 
       aria-label="Selecionar modelo de IA"
@@ -29,24 +27,14 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
         },
       }}
     >
-      <StyledMenuItem value="gpt-4">
-        <IconWrapper>
-          GPT-4
-          <ChatGPTIcon />
-        </IconWrapper>
-      </StyledMenuItem>
-      <StyledMenuItem value="gemini">
-        <IconWrapper>
-          Gemini
-          <GeminiIcon />
-        </IconWrapper>
-      </StyledMenuItem>
-      <StyledMenuItem value="claude">
-        <IconWrapper>
-          Claude
-          <CloudeIcon />
-        </IconWrapper>
-      </StyledMenuItem>
+      {options.map((option) => (
+        <StyledMenuItem key={option.value} value={option.value} disabled={option.isDisabled}>
+          <IconWrapper>
+            {option.label}
+            {option.icon}
+          </IconWrapper>
+        </StyledMenuItem>
+      ))}
     </StyledSelect>
   );
 };

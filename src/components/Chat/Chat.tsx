@@ -184,7 +184,6 @@ export const Chat: React.FC = () => {
         </ModelSelector>
       </div>
       <ChatArea>
-        {loading && <div>⌛ Digitando...</div>}
         {messages.map((message, index) => (
           <MessagesContainer key={index}>
             <MessageWrapper isUser={message.role === "user"} key={index}>
@@ -192,6 +191,7 @@ export const Chat: React.FC = () => {
             </MessageWrapper>
           </MessagesContainer>
         ))}
+        {loading && <div>⌛ Pensando...</div>}
       </ChatArea>
       <InputArea>
         <InputWrapper>
