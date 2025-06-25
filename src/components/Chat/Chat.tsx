@@ -21,6 +21,9 @@ import SpeechRecognition, {
 import { fetchMessages } from "@/lib/messages";
 import { useSession } from "next-auth/react";
 import { saveMessage } from "@/lib/messages";
+import { ModelSelector } from "../ModelSelector/ModelSelector";
+import { AIModel } from "@/types/model";
+import { usePreferredModel, useUpdatePreferredModel } from "@/hooks/usePreferredModel";
 
 export const Chat: React.FC = () => {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>(
@@ -31,13 +34,18 @@ export const Chat: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [isRecording, setIsRecording] = useState(false);
-
   const { transcript, resetTranscript, browserSupportsSpeechRecognition } =
     useSpeechRecognition();
   const startListening = () => {
     SpeechRecognition.startListening({ continuous: true, language: "pt-BR" });
   };
   const { data: session } = useSession();
+  const { data: preferredModel = "gpt-4" } = usePreferredModel();
+  const { mutate: updateModel } = useUpdatePreferredModel();
+
+  const handleModelChange = (newModel: AIModel) => {
+    updateModel(newModel);
+  };
 
   const handleSendMessage = async () => {
     if (!userMessage.trim()) return;
@@ -50,7 +58,7 @@ export const Chat: React.FC = () => {
 
     await saveMessage({
       userId,
-      model: "gpt-4",
+      model: preferredModel,
       role: "user",
       content: userMessage,
     });
@@ -75,7 +83,7 @@ export const Chat: React.FC = () => {
 
       await saveMessage({
         userId,
-        model: "gpt-4",
+        model: preferredModel,
         role: "assistant",
         content: botMessage.content,
       });
@@ -138,7 +146,7 @@ export const Chat: React.FC = () => {
     const loadMessages = async () => {
       if (!session?.user?.id) return;
 
-      const history = await fetchMessages(session.user.id, "gpt-4");
+      const history = await fetchMessages(session.user.id, preferredModel);
 
       const formattedMessages = history.map((msg: { role: string; content: string }) => ({
         role: msg.role,
@@ -149,12 +157,16 @@ export const Chat: React.FC = () => {
     };
 
     loadMessages();
-  }, [session]);
+  }, [session, preferredModel]);
 
   return (
     <Container>
+      <div style={{ display: "flex", justifyContent: "flex-end", padding: "10px" }}>
+        <ModelSelector
+          onModelChange={handleModelChange} selectedModel={preferredModel}>
+        </ModelSelector>
+      </div>
       <ChatArea>
-        {loading && <div>Digitando...</div>}
         {messages.map((message, index) => (
           <MessagesContainer key={index}>
             <MessageWrapper isUser={message.role === "user"} key={index}>
@@ -162,6 +174,7 @@ export const Chat: React.FC = () => {
             </MessageWrapper>
           </MessagesContainer>
         ))}
+        {loading && <div>⌛ Pensando...</div>}
       </ChatArea>
       <InputArea>
         <InputWrapper>
@@ -181,7 +194,6 @@ export const Chat: React.FC = () => {
           onClick={handleSendMessage}
           disabled={loading}
           ref={buttonRef}
-          loading={loading}
         >
           <SendIcon htmlColor="green" />
         </IconButton>

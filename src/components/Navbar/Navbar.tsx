@@ -28,7 +28,7 @@ export const Navbar: React.FC = () => {
   return (
     <Container>
       <LogoWrapper href="/">
-        <StyledImage alt="logo" src={filledLogo}></StyledImage>
+        <StyledImage alt="logo" src={filledLogo} priority></StyledImage>
         <div>Zeta</div>
       </LogoWrapper>
       <ButtonWrapper>
