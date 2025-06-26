@@ -69,7 +69,7 @@ export const Chat: React.FC = () => {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userMessage }),
+        body: JSON.stringify({ message: userMessage, model: preferredModel }),
       });
 
       const data = await res.json();
