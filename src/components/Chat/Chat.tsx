@@ -14,7 +14,6 @@ import {
   MessagesContainer,
 } from "./styles";
 import React, { useEffect, useState, useRef } from "react";
-import { textFormatter } from "../../utils/formatters";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
@@ -24,6 +23,7 @@ import { saveMessage } from "@/lib/messages";
 import { ModelSelector } from "../ModelSelector/ModelSelector";
 import { AIModel, MessageRole } from "@/types/model";
 import { usePreferredModel, useUpdatePreferredModel } from "@/hooks/usePreferredModel";
+import { MarkdownMessage } from "../MarkdownMessage/MarkdownMessage";
 
 export const Chat: React.FC = () => {
   const [messages, setMessages] = useState<{ role: MessageRole; content: string }[]>(
@@ -170,7 +170,7 @@ export const Chat: React.FC = () => {
         {messages.map((message, index) => (
           <MessagesContainer key={index}>
             <MessageWrapper user={message.role} key={index}>
-              <div key={index}>{textFormatter(message.content)}</div>
+              <MarkdownMessage content={message.content} user={message.role}/>
             </MessageWrapper>
           </MessagesContainer>
         ))}
