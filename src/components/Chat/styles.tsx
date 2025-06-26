@@ -33,7 +33,7 @@ export const MessagesContainer = styled.div`
 export const MessageWrapper = styled.div<{ user: MessageRole }>`
   align-self: ${({ user }) => (user === "user" ? "flex-end" : "flex-start")};
   background-color: ${({ user }) => (user === "user" ? "green" : "#f0f0f0")};
-  padding: 10px 15px;
+  padding: 10px 24px;
   border-radius: 12px;
   max-width: 80%;
   word-wrap: break-word;
