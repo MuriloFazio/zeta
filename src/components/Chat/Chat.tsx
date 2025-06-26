@@ -22,7 +22,6 @@ import { useSession } from "next-auth/react";
 import { saveMessage } from "@/lib/messages";
 import { ModelSelector } from "../ModelSelector/ModelSelector";
 import { AIModel, MessageRole } from "@/types/model";
-import { AIModel, MessageRole } from "@/types/model";
 import { usePreferredModel, useUpdatePreferredModel } from "@/hooks/usePreferredModel";
 import { MarkdownMessage } from "../MarkdownMessage/MarkdownMessage";
 
@@ -171,7 +170,7 @@ export const Chat: React.FC = () => {
         {messages.map((message, index) => (
           <MessagesContainer key={index}>
             <MessageWrapper user={message.role} key={index}>
-              <MarkdownMessage content={message.content} user={message.role as MessageRole}/>
+              <MarkdownMessage content={message.content} user={message.role}/>
             </MessageWrapper>
           </MessagesContainer>
         ))}
