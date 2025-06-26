@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { TextField } from "@mui/material";
+import { MessageRole } from "@/types/model";
 
 export const Container = styled.div`
   display: flex;
@@ -29,10 +30,10 @@ export const MessagesContainer = styled.div`
   max-width: 50rem;
 `;
 
-export const MessageWrapper = styled.div<{ isUser: boolean }>`
-  align-self: ${({ isUser }) => (isUser ? "flex-end" : "flex-start")};
-  background-color: ${({ isUser }) => (isUser ? "#0078ff" : "#f0f0f0")};
-  color: ${({ isUser }) => (isUser ? "#fff" : "#333")};
+export const MessageWrapper = styled.div<{ user: MessageRole }>`
+  align-self: ${({ user }) => (user === "user" ? "flex-end" : "flex-start")};
+  background-color: ${({ user }) => (user === "user" ? "#0078ff" : "#f0f0f0")};
+  color: ${({ user }) => (user === "user" ? "#fff" : "#333")};
   padding: 10px 15px;
   border-radius: 12px;
   max-width: 80%;
