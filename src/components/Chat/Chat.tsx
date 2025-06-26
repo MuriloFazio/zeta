@@ -148,7 +148,7 @@ export const Chat: React.FC = () => {
 
       const history = await fetchMessages(session.user.id, preferredModel);
 
-      const formattedMessages = history.map((msg: { role: string; content: string }) => ({
+      const formattedMessages = history.map((msg: { role: MessageRole; content: string }) => ({
         role: msg.role as MessageRole,
         content: msg.content,
       }));
