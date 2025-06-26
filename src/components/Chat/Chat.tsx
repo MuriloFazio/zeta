@@ -22,11 +22,11 @@ import { fetchMessages } from "@/lib/messages";
 import { useSession } from "next-auth/react";
 import { saveMessage } from "@/lib/messages";
 import { ModelSelector } from "../ModelSelector/ModelSelector";
-import { AIModel } from "@/types/model";
+import { AIModel, MessageRole } from "@/types/model";
 import { usePreferredModel, useUpdatePreferredModel } from "@/hooks/usePreferredModel";
 
 export const Chat: React.FC = () => {
-  const [messages, setMessages] = useState<{ role: string; content: string }[]>(
+  const [messages, setMessages] = useState<{ role: MessageRole; content: string }[]>(
     []
   );
   const [userMessage, setUserMessage] = useState("");
@@ -50,7 +50,7 @@ export const Chat: React.FC = () => {
   const handleSendMessage = async () => {
     if (!userMessage.trim()) return;
 
-    const newMessage = { role: "user", content: userMessage };
+    const newMessage = { role: "user" as MessageRole, content: userMessage };
     setMessages((prev) => [...prev, newMessage]);
 
     if (!session?.user?.id) return;
@@ -75,7 +75,7 @@ export const Chat: React.FC = () => {
       const data = await res.json();
 
       const botMessage = {
-        role: "assistant",
+        role: "assistant" as MessageRole,
         content: data.resposta || "No response available",
       };
 
@@ -89,7 +89,7 @@ export const Chat: React.FC = () => {
       });
     } catch (error) {
       const errorMessage = {
-        role: "system",
+        role: "system" as MessageRole,
         content: `Erro ao obter resposta: ${error}`,
       };
       setMessages((prev) => [...prev, errorMessage]);
@@ -149,7 +149,7 @@ export const Chat: React.FC = () => {
       const history = await fetchMessages(session.user.id, preferredModel);
 
       const formattedMessages = history.map((msg: { role: string; content: string }) => ({
-        role: msg.role,
+        role: msg.role as MessageRole,
         content: msg.content,
       }));
 
@@ -169,7 +169,7 @@ export const Chat: React.FC = () => {
       <ChatArea>
         {messages.map((message, index) => (
           <MessagesContainer key={index}>
-            <MessageWrapper isUser={message.role === "user"} key={index}>
+            <MessageWrapper user={message.role} key={index}>
               <div key={index}>{textFormatter(message.content)}</div>
             </MessageWrapper>
           </MessagesContainer>
