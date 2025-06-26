@@ -1,9 +1,8 @@
-import { NextResponse } from "next/server";
-import {
-  getChatGPTResponse
-} from "@/lib/openai";
-import { getClaudeResponse } from "@/lib/anthropic";
 import { connectDB } from "@/lib/mongodb";
+import { NextResponse } from "next/server";
+import { getChatGPTResponse } from "@/lib/openai";
+import { getClaudeResponse } from "@/lib/anthropic";
+import { getGeminiResponse } from "@/lib/google";
 
 export async function POST(req: Request) {
   try {
@@ -15,7 +14,7 @@ export async function POST(req: Request) {
         const chatGPTAnswer = await getChatGPTResponse(message);
         return NextResponse.json({ resposta: chatGPTAnswer });
       case "gemini":
-        const geminiAnswer = await getChatGPTResponse(message);
+        const geminiAnswer = await getGeminiResponse(message);
         return NextResponse.json({ resposta: geminiAnswer });
       case "claude":
         const claudeAnswer = await getClaudeResponse([message]);
